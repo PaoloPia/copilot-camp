@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% set meta = page.meta or {} %}
+  {% set src = page.file.src_uri if page.file and page.file.src_uri else "" %}
+  {% set skip_keys = ["badge", "title", "description"] %}
+  {% set ordered_keys = [
+    "code",
+    "codename",
+    "difficulty",
+    "time",
+    "products",
+    "tags",
+    "industries",
+    "level",
+    "created-date",
+    "created_date",
+    "last-edited-date",
+    "last_edited_date"
+  ] %}
+
+  {% if src.startswith("pages/") and meta %}
+    {% set ns = namespace(rows="", rendered=[]) %}
+
+    {% for key in ordered_keys %}
+      {% if key in meta and key not in skip_keys and meta[key] is not none and meta[key] != "" %}
+        {% if key == "codename" and "code" in meta %}
+        {% elif key == "created_date" and "created-date" in meta %}
+        {% elif key == "last_edited_date" and "last-edited-date" in meta %}
+        {% else %}
+          {% set label = key|replace("_", " ")|replace("-", " ")|title %}
+          {% set emoji = "🗂️" %}
+          {% set value = meta[key] %}
+
+          {% if key in ["code", "codename"] %}
+            {% set label = "Lab code" %}
+            {% set emoji = "🧪" %}
+          {% elif key == "difficulty" %}
+            {% set label = "Difficulty" %}
+            {% set emoji = "⭐" %}
+          {% elif key == "time" %}
+            {% set label = "Time to complete" %}
+            {% set emoji = "🕒" %}
+          {% elif key == "products" %}
+            {% set label = "Products" %}
+            {% set emoji = "🧩" %}
+          {% elif key == "tags" %}
+            {% set label = "Tags" %}
+            {% set emoji = "🏷️" %}
+          {% elif key == "industries" %}
+            {% set label = "Industries" %}
+            {% set emoji = "🏢" %}
+          {% elif key == "level" %}
+            {% set label = "Level" %}
+            {% set emoji = "📚" %}
+          {% elif key in ["created-date", "created_date"] %}
+            {% set label = "Created" %}
+            {% set emoji = "📅" %}
+          {% elif key in ["last-edited-date", "last_edited_date"] %}
+            {% set label = "Last edited" %}
+            {% set emoji = "📝" %}
+          {% endif %}
+
+          {% set value_html = "" %}
+          {% if key == "time" and value is number %}
+            {% set value_html = value|string ~ " min" %}
+          {% elif key == "time" and value is string and value|int > 0 and (value|int|string == value) %}
+            {% set value_html = value ~ " min" %}
+          {% elif key == "difficulty" and (value is number or (value is string and value|int > 0 and (value|int|string == value))) %}
+            {% set score = value|int %}
+            {% set score = [score, 5]|min %}
+            {% set score = [score, 1]|max %}
+            {% set value_html = ("⭐" * score) ~ ("☆" * (5 - score)) %}
+          {% elif key == "level" and (value is number or (value is string and value|int >= 0 and (value|int|string == value))) %}
+            {% set level_num = value|int %}
+            {% set filled = level_num // 100 %}
+            {% set filled = [filled, 5]|min %}
+            {% set filled = [filled, 0]|max %}
+            {% set lv = namespace(bullets="") %}
+            {% for idx in range(5) %}
+              {% if idx < filled %}
+                {% set lv.bullets = lv.bullets ~ "●" %}
+              {% else %}
+                {% set lv.bullets = lv.bullets ~ "○" %}
+              {% endif %}
+            {% endfor %}
+            {% set value_html = '<span class="cc-frontmatter-level-bullets" aria-label="' ~ level_num|string|e ~ ' out of 500">' ~ lv.bullets ~ '</span>' %}
+          {% elif key in ["created-date", "created_date", "last-edited-date", "last_edited_date"] %}
+            {% set value_html = '<span class="cc-frontmatter-date" data-date="' ~ value|string|e ~ '">' ~ value|string|e ~ '</span>' %}
+          {% elif value is sequence and value is not string and value is not mapping %}
+            {% set chips = namespace(html="") %}
+            {% for item in value %}
+              {% set chips.html = chips.html ~ '<span class="cc-frontmatter-chip">' ~ item|string|e ~ '</span>' %}
+            {% endfor %}
+            {% set value_html = chips.html %}
+          {% else %}
+            {% set value_html = value|string|e %}
+          {% endif %}
+
+          {% set ns.rows = ns.rows ~ '<tr><th><span class="cc-frontmatter-label"><span class="cc-frontmatter-emoji">' ~ emoji ~ '</span>' ~ label|e ~ '</span></th><td>' ~ value_html ~ '</td></tr>' %}
+          {% set ns.rendered = ns.rendered + [key] %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% for key, value in meta.items() %}
+      {% if key not in ordered_keys and key not in skip_keys and key not in ns.rendered and value is not none and value != "" %}
+        {% set label = key|replace("_", " ")|replace("-", " ")|title %}
+        {% if value is sequence and value is not string and value is not mapping %}
+          {% set chips = namespace(html="") %}
+          {% for item in value %}
+            {% set chips.html = chips.html ~ '<span class="cc-frontmatter-chip">' ~ item|string|e ~ '</span>' %}
+          {% endfor %}
+          {% set value_html = chips.html %}
+        {% else %}
+          {% set value_html = value|string|e %}
+        {% endif %}
+        {% set ns.rows = ns.rows ~ '<tr><th><span class="cc-frontmatter-label"><span class="cc-frontmatter-emoji">🗂️</span>' ~ label|e ~ '</span></th><td>' ~ value_html ~ '</td></tr>' %}
+      {% endif %}
+    {% endfor %}
+
+    {% if ns.rows %}
+      <div class="cc-frontmatter-wrap" data-generated="frontmatter">
+        <table class="cc-frontmatter-table">
+          <tbody>{{ ns.rows|safe }}</tbody>
+        </table>
+      </div>
+      <script>
+        (function () {
+          var dateNodes = document.querySelectorAll('.cc-frontmatter-date[data-date]');
+          if (!dateNodes.length) {
+            return;
+          }
+
+          dateNodes.forEach(function (node) {
+            var raw = node.getAttribute('data-date');
+            if (!raw) {
+              return;
+            }
+
+            var parsed;
+            var match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (match) {
+              parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+            } else {
+              parsed = new Date(raw);
+            }
+
+            if (!isNaN(parsed.getTime())) {
+              node.textContent = new Intl.DateTimeFormat(undefined).format(parsed);
+            }
+          });
+        })();
+      </script>
+    {% endif %}
+  {% endif %}
+
+  {{ super() }}
+{% endblock %}

@@ -2,11 +2,21 @@
 code: WIQ01
 title: Work IQ Setup and consumption via CLI
 description: Learn how to set up Work IQ in your tenant, consume it via CLI, and integrate it with GitHub Copilot and third-party applications.
-tags: [work-iq, cli, copilot, api, entra-id, microsoft-365]
+tags: 
+    - work-iq
+    - cli
+    - copilot
+    - api
+    - entra-id
+    - microsoft-365
 level: 200
-time: 75
+time: 45
 badge: WorkIQ-Expert
-products: [Work IQ, Copilot, Entra ID, Microsoft 365]
+products: 
+    - Work IQ
+    - Copilot
+    - Microsoft 365
+    - Entra ID
 created-date: 2026-07-28
 last-edited-date: 2026-07-28
 ---

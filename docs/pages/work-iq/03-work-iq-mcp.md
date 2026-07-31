@@ -2,11 +2,20 @@
 code: WIQ03
 title: Work IQ MCP Protocol
 description: Learn how to use the Work IQ Model Context Protocol (MCP) to enable AI agents to read, create, and manage Microsoft 365 entities through generic tools and resource paths.
-tags: [work-iq, mcp, copilot, agents, microsoft-365, entity-tools]
+tags:
+  - work-iq
+  - mcp
+  - copilot
+  - agents
+  - microsoft-365
+  - entity-tools
 level: 300
-time: 90
+time: 60
 badge: WorkIQ-Expert
-products: [Work IQ, MCP, Copilot, Microsoft 365, Model Context Protocol]
+products: 
+  - Microsoft 365 Copilot
+  - Work IQ
+  - Entra ID
 created-date: 2026-07-28
 last-edited-date: 2026-07-28
 ---

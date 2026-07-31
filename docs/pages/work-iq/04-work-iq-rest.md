@@ -2,11 +2,19 @@
 code: WIQ04
 title: Work IQ REST Protocol
 description: Learn how to consume Work IQ through the REST API using OAuth 2.0 authentication and multi-turn conversations with enterprise search grounding and optional web grounding.
-tags: [work-iq, rest-api, oauth, powershell, bash, curl, api, multi-turn]
+tags: 
+    - work-iq
+    - rest-api
+    - oauth
+    - powershell
+    - bash
 level: 300
 time: 60
 badge: WorkIQ-Expert
-products: [Work IQ, Microsoft 365 Copilot, Entra ID]
+products:
+    - Microsoft 365 Copilot
+    - Work IQ
+    - Entra ID
 created-date: 2026-07-28
 last-edited-date: 2026-07-28
 ---
@@ -25,7 +33,7 @@ last-edited-date: 2026-07-28
 
 ## Scenario
 
-You're building a custom application that needs to integrate Microsoft 365 Copilot capabilities programmatically. Instead of relying on A2A protocols or MCP, you need direct REST API access to handle multi-turn conversations while respecting enterprise search and web search grounding. You'll set up OAuth 2.0 authentication using the Entra ID application from **Lab WIQ01**, then craft requests using both PowerShell (for Windows) and Bash with curl (for macOS/Linux), just for the sake of simulating the REST requests at low level and learning how Work IQ works over HTTP.
+You're building a custom application that needs to integrate Microsoft 365 Copilot capabilities programmatically. Instead of relying on A2A protocols or MCP, you need direct REST API access to handle multi-turn conversations while respecting enterprise search and web search grounding. You'll set up OAuth 2.0 authentication using the Entra ID application from **Lab WIQ01**, then craft requests using both PowerShell or Bash with curl, just for the sake of simulating the REST requests at low level and learning how Work IQ works over HTTP.
 
 ## Lab objectives
 
@@ -151,7 +159,7 @@ https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/authorize?
 
 Then exchange the authorization code for an access token.
 
-**PowerShell (Windows):**
+**PowerShell**
 
 ```powershell
 # Replace the placeholders before running
@@ -180,7 +188,7 @@ $ACCESS_TOKEN = $response.access_token
 Write-Host "Access token stored in `$ACCESS_TOKEN"
 ```
 
-**Bash (macOS/Linux):**
+**Bash:**
 
 ```bash
 # Replace the placeholders before running
@@ -213,7 +221,7 @@ The `ACCESS_TOKEN` variable is now available in your shell session and will be r
 Once you have a valid access token, you can start a multi-turn conversation with Work IQ.
 First of all, create a conversation session:
 
-**PowerShell (Windows):**
+**PowerShell:**
 
 ```powershell
 # Create conversation
@@ -234,7 +242,7 @@ Write-Host "Status: $($response.status)"
 Write-Host "Turn Count: $($response.turnCount)"
 ```
 
-**Bash (MasOS / Linux):**
+**Bash:**
 
 ```bash
 # Create conversation
@@ -278,7 +286,7 @@ Here you can see how the expected response should look like:
 
 Now send your first message to the conversation. This message will be grounded in both enterprise search and web search (default behavior).
 
-**PowerShell (Windows):**
+**PowerShell:**
 
 ```powershell
 # Chat message
@@ -303,7 +311,7 @@ Write-Host "Response: $($chatResponse.messages[-1].text)"
 Write-Host "Turn Count: $($chatResponse.turnCount)"
 ```
 
-**Bash (MacOS / Linux):**
+**Bash:**
 
 ```bash
 # Chat endpoint
@@ -342,7 +350,7 @@ echo "Turn Count: $TURN_COUNT"
 
 By default, Work IQ uses both enterprise and web search grounding. To focus on your organization's data only, disable web grounding:
 
-**PowerShell (Windows):**
+**PowerShell:**
 
 ```powershell
 $chatUrl = "https://workiq.svc.cloud.microsoft/rest/conversations/$conversationId/chat"
@@ -368,7 +376,7 @@ Write-Host "Enterprise-only message sent!"
 Write-Host "Response: $($chatResponse.messages[-1].text)"
 ```
 
-**Bash (MacOS / Linux):**
+**Bash:**
 
 ```bash
 ACCESS_TOKEN=$(get_access_token)
@@ -430,7 +438,7 @@ To provide additional context from a SharePoint Online document library, first c
 
 Once documents are indexed, provide SharePoint file URLs as context:
 
-**PowerShell (Windows):**
+**PowerShell:**
 
 ```powershell
 $chatUrl = "https://workiq.svc.cloud.microsoft/rest/conversations/$conversationId/chat"
@@ -462,7 +470,7 @@ Write-Host "SharePoint-grounded message sent!"
 Write-Host "Response: $($chatResponse.messages[-1].text)"
 ```
 
-**Bash (MacOS / Linux):**
+**Bash:**
 
 ```bash
 ACCESS_TOKEN=$(get_access_token)

@@ -132,8 +132,6 @@ Always add this placeholder block near the top of the lab, after the title:
 
 ### C) End each step with cc-end-step
 
-### C) End each step with cc-end-step
-
 At the end of every step, add:
 
 ```xml
@@ -150,15 +148,7 @@ Always include:
 <cc-next />
 ```
 
-### E) Visitor stats image before awards
-
-Always include, before awards:
-
-```html
-<img src="https://m365-visitor-stats.azurewebsites.net/copilot-camp/<section>/<lab-id>" />
-```
-
-### F) One or more awards
+### E) One or more awards before visitor stats image
 
 Always include one or more awards and ask the developer for suitable badges if missing:
 
@@ -166,15 +156,29 @@ Always include one or more awards and ask the developer for suitable badges if m
 <cc-award badgeId="<BadgeId>" badgeName="<Badge Name>" />
 ```
 
+### F) Visitor stats image
+
+Always include, before awards:
+
+```html
+<img src="https://m365-visitor-stats.azurewebsites.net/copilot-camp/<section>/<lab-id>" />
+```
+
 ### G) Image placeholders where useful
 
 When a step needs a screenshot, add placeholders:
 
 ```markdown
-![TODO: replace with screenshot description](../../assets/images/<folder>/<image>.png)
+![TODO: replace with screenshot description](../../assets/images/<lab-folder>/<image>.png)
 ```
 
-Use the alternate text of the image to suggest to the lab author the image content to capture. The image path should be relative to the lab file.
+Generate the alternate text of the suggested screenshot/image to suggest to the lab author the image content to capture. The image path should be like the following one /docs/assets/images/<lab-folder>/<image>.png.
+
+For example, a real image should be defined like the following:
+
+```markdown
+![Copilot Studio test panel showing the WorkIQ Consumer Agent responding to the prompt "Who am I? Who is my manager? What is my role in the organization?" with detailed answers retrieved via the A2A protocol.](../../assets/images/work-iq-02/work-iq-02-mcs-a2a-agent-01.png)
+```
 
 ## Behavior Contract
 

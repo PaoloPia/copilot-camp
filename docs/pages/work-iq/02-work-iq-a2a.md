@@ -2,11 +2,20 @@
 code: WIQ02
 title: Work IQ A2A Protocol
 description: Learn how to use the Agent-to-Agent (A2A) protocol to communicate with Work IQ and build multi-agent experiences. Discover agent discovery, authentication, message sending, and protocol inspection.
-tags: [work-iq, a2a, multi-agent, copilot, agents]
+tags: 
+  - work-iq
+  - a2a
+  - multi-agent
+  - copilot
+  - agents
 level: 300
-time: 40
+time: 50
 badge: WorkIQ-Expert
-products: [Microsoft 365 Copilot, Work IQ, Copilot Studio]
+products: 
+  - Microsoft 365 Copilot
+  - Work IQ
+  - Copilot Studio
+  - Entra ID
 created-date: 2026-07-28
 last-edited-date: 2026-07-28
 ---
